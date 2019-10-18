@@ -5,7 +5,7 @@
              x:Class="Worldhands.Prism.App">
 	<Application.Resources>
 
-		<!-- Application resource dictionary -->
+		
 
 	</Application.Resources>
 </prism:PrismApplication>
