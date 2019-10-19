@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,12 +8,14 @@ using Worldhands.Web.Data.Entities;
 
 namespace Worldhands.Web.Data
 {
-    public class DataContext : DbContext
+    public class DataContext : IdentityDbContext<User>
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {      
         }
 
         public DbSet<Visitor> Visitors { get; set; }
+
+        public DbSet<Manager> Managers { get; set; }
     }
 }
