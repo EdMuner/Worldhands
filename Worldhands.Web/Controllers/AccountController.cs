@@ -1,7 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using Worldhands.Web.Data;
 using Worldhands.Web.Helpers;
@@ -11,16 +16,20 @@ namespace Worldhands.Web.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly DataContext _dataContext;
+      
         private readonly IUserHelper _userHelper;
+        private readonly IConfiguration _configuration;
 
 
         public AccountController(
-           DataContext dataContext,
-           IUserHelper userHelper)
+        
+           IUserHelper userHelper,
+           IConfiguration configuration)
         {
-            _dataContext = dataContext;
+        
             _userHelper = userHelper;
+            _configuration = configuration;
+
         }
 
         [HttpGet]
@@ -60,24 +69,50 @@ namespace Worldhands.Web.Controllers
 
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(AddUserViewModel model)
+        public async Task<IActionResult> CreateToken([FromBody] LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var role = "Visitor";
-              
-                var user = await _userHelper.AddUser(model, role);
-                if (user == null)
+                var user = await _userHelper.GetUserByEmailAsync(model.Username);
+                if (user != null)
                 {
-                    ModelState.AddModelError(string.Empty, "This email is already used.");
-                    return View(model);
-                }           
-                await _dataContext.SaveChangesAsync();         
-                ViewBag.Message = "The instructions to allow your user has been sent to email.";
-                return View(model);
+                    var result = await _userHelper.ValidatePasswordAsync(
+                        user,
+                        model.Password);
+
+                    if (result.Succeeded)
+                    {
+                        var claims = new[]
+                        {
+                            new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+
+                };
+
+
+                        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Tokens:Key"]));
+                        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                        var token = new JwtSecurityToken(
+                            _configuration["Tokens:Issuer"],
+                            _configuration["Tokens:Audience"],
+                            claims,
+
+                            expires: DateTime.UtcNow.AddMonths(6),
+
+                            signingCredentials: credentials);
+                        var results = new
+                        {
+                            token = new JwtSecurityTokenHandler().WriteToken(token),
+                            expiration = token.ValidTo
+                        };
+
+                        return Created(string.Empty, results);
+                    }
+                }
             }
-            return View(model);
+
+            return BadRequest();
         }
+
     }
 }

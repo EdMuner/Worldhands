@@ -89,5 +89,13 @@ namespace Worldhands.Web.Helpers
             await AddUserToRoleAsync(newUser, role);
             return newUser;
         }
+
+        public async Task<SignInResult> ValidatePasswordAsync(User user, string password)
+        {
+            return await _signInManager.CheckPasswordSignInAsync(
+            user,
+            password,
+            false);
+        }
     }
 }
