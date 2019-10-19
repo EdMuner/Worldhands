@@ -27,7 +27,7 @@ namespace Worldhands.Web.Helpers
 
         Task LogoutAsync();
 
-    
+        Task<SignInResult> ValidatePasswordAsync(User user, string password);
 
     }
 }
