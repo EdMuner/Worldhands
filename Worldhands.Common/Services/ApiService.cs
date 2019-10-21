@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Plugin.Connectivity;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -9,10 +10,10 @@ using Worldhands.Common.Models;
 
 namespace Worldhands.Common.Services
 {
-    public class ApiService : IApiService
+    public class ApiServiceLand : IApiService
     {
 
-        public async Task<Response<TokenResponse>> GetTokenAsync(
+        public async Task<LandResponse<TokenResponse>> GetTokenAsync(
               string urlBase,
               string servicePrefix,
               string controller,
@@ -33,7 +34,7 @@ namespace Worldhands.Common.Services
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    return new Response<TokenResponse>
+                    return new LandResponse<TokenResponse>
                     {
                         IsSuccess = false,
                         Message = result,
@@ -41,7 +42,7 @@ namespace Worldhands.Common.Services
                 }
 
                 var token = JsonConvert.DeserializeObject<TokenResponse>(result);
-                return new Response<TokenResponse>
+                return new LandResponse<TokenResponse>
                 {
                     IsSuccess = true,
                     Result = token
@@ -49,7 +50,7 @@ namespace Worldhands.Common.Services
             }
             catch (Exception ex)
             {
-                return new Response<TokenResponse>
+                return new LandResponse<TokenResponse>
                 {
                     IsSuccess = false,
                     Message = ex.Message
@@ -57,7 +58,12 @@ namespace Worldhands.Common.Services
             }
         }
 
-        public async Task<Response<VisitorResponse>> GetVisitorByEmailAsync(
+        public Task GetList<T>(string v1, string v2, string v3)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<LandResponse<VisitorResponse>> GetVisitorByEmailAsync(
             string urlBase,
             string servicePrefix,
             string controller,
@@ -82,7 +88,7 @@ namespace Worldhands.Common.Services
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    return new Response<VisitorResponse>
+                    return new LandResponse<VisitorResponse>
                     {
                         IsSuccess = false,
                         Message = result,
@@ -90,7 +96,7 @@ namespace Worldhands.Common.Services
                 }
 
                 var visitor = JsonConvert.DeserializeObject<VisitorResponse>(result);
-                return new Response<VisitorResponse>
+                return new LandResponse<VisitorResponse>
                 {
                     IsSuccess = true,
                     Result = visitor
@@ -98,12 +104,51 @@ namespace Worldhands.Common.Services
             }
             catch (Exception ex)
             {
-                return new Response<VisitorResponse>
+                return new LandResponse<VisitorResponse>
                 {
                     IsSuccess = false,
                     Message = ex.Message
                 };
             }
-        }    
-    }
+
+        }
+        public async Task<bool> CheckConnectionAsync(string url)
+        {
+            if (!CrossConnectivity.Current.IsConnected)
+            {
+                return false;
+            }
+
+            return await CrossConnectivity.Current.IsRemoteReachable(url);
+        }
+
+        public async Task<TokenResponse> GetToken(
+       string urlBase,
+       string username,
+       string password)
+        {
+            try
+            {
+                var client = new HttpClient();
+                client.BaseAddress = new Uri(urlBase);
+                var response = await client.PostAsync("Token",
+                    new StringContent(string.Format(
+                    "grant_type=password&username={0}&password={1}",
+                    username, password),
+                    Encoding.UTF8, "application/x-www-form-urlencoded"));
+                var resultJSON = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<TokenResponse>(
+                    resultJSON);
+                return result;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+
+        
+
+    }   
 }

@@ -5,7 +5,7 @@ namespace Worldhands.Common.Services
 {
     public interface IApiService
     {
-        Task<Response<VisitorResponse>> GetVisitorByEmailAsync(
+        Task<LandResponse<VisitorResponse>> GetVisitorByEmailAsync(
             string urlBase,
             string servicePrefix,
             string controller,
@@ -13,10 +13,15 @@ namespace Worldhands.Common.Services
             string accessToken,
             string email);
 
-        Task<Response<TokenResponse>> GetTokenAsync(
+        Task<LandResponse<TokenResponse>> GetTokenAsync(
             string urlBase,
             string servicePrefix,
             string controller,
             TokenRequest request);
+
+      
+        Task<bool> CheckConnectionAsync(string url);
+
+       
     }
 }
