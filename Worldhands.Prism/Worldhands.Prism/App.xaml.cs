@@ -25,10 +25,11 @@ namespace Worldhands.Prism
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.Register<IApiService, ApiServiceLand>();
+            containerRegistry.Register<IApiService, ApiService>();
             containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<LoginPage, LoginPageViewModel>();
             containerRegistry.RegisterForNavigation<LandsPage, LandsPageViewModel>();
+            containerRegistry.RegisterForNavigation<LandTabbedPage, LandTabbedPageViewModel>();
         }
     }
 }

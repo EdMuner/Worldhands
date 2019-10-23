@@ -11,7 +11,7 @@ using Worldhands.Web.Data.Entities;
 
 namespace Worldhands.Web.Controllers
 {
-    [Authorize(Roles = "Manager")]
+  
     public class VisitorsController : Controller
     {
         private readonly DataContext _dataContext;
