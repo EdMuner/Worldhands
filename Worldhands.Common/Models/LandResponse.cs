@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Worldhands.Common.Models
 {
-    public class Land
+    public class LandResponse
     {
       
         public string Name { get; set; }
@@ -61,10 +61,10 @@ namespace Worldhands.Common.Models
         public string NumericCode { get; set; }
 
      
-        public List<Currency> Currencies { get; set; }
+        public List<CurrencyResponse> Currencies { get; set; }
 
       
-        public List<Language> languages { get; set; }
+        public List<LanguageResponse> Languages { get; set; }
 
         public Translations Translations { get; set; }
 

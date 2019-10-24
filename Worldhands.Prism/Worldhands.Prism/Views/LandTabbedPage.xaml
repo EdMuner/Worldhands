@@ -2,7 +2,16 @@
 <TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
             xmlns:prism="http://prismlibrary.com"
+            xmlns:local="clr-namespace:Worldhands.Prism.Views"
             prism:ViewModelLocator.AutowireViewModel="True"
-            x:Class="Worldhands.Prism.Views.LandTabbedPage">
-  
+            x:Class="Worldhands.Prism.Views.LandTabbedPage"
+            Title="{Binding Title}">
+
+    <TabbedPage.Children>
+        <local:LandPage/>
+        <local:BorderPage/>
+        
+    </TabbedPage.Children>
+
+
 </TabbedPage>

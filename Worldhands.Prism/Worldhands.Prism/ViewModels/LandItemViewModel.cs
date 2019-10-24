@@ -1,34 +1,31 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using Xamarin.Forms;
+using Prism.Commands;
 using Prism.Navigation;
-using System.Windows.Input;
 using Worldhands.Common.Models;
 using Worldhands.Prism.Views;
-using Xamarin.Forms;
+using System;
 
 namespace Worldhands.Prism.ViewModels
 {
-    public class LandItemViewModel : ViewModelBase
+    public class LandItemViewModel : LandResponse
     {
-        public LandItemViewModel(
-            INavigationService navigationService,
-            Land land) : base(navigationService)
+        private readonly INavigationService _navigationService;
+        private DelegateCommand _selectLandCommand;
+
+        public LandItemViewModel(INavigationService navigationService)
         {
+            _navigationService = navigationService;
         }
 
-        public ICommand SelectLandCommand
-        {
-            get
-            {
-                return new RelayCommand(SelectLand);
-            }
-        }
+        public DelegateCommand SelectLandCommand => _selectLandCommand ?? (_selectLandCommand = new DelegateCommand(SelectLand));
 
         private async void SelectLand()
         {
-         
-            await Application.Current.MainPage.Navigation.PushAsync(new LandTabbedPage());
+            var parameters = new NavigationParameters
+            {
+                { "land", this}
+            };
+            await _navigationService.NavigateAsync("LandTabbedPage", parameters);
         }
-
-
     }
 }

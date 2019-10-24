@@ -2,7 +2,7 @@
 
 namespace Worldhands.Common.Models
 {
-    public class Currency
+    public class CurrencyResponse
     {
       
         public string Code { get; set; }

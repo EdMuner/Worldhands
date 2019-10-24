@@ -1,7 +1,5 @@
 ﻿using Prism.Commands;
-using Prism.Mvvm;
 using Prism.Navigation;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -12,24 +10,31 @@ namespace Worldhands.Prism.ViewModels
 {
     public class LandsPageViewModel : ViewModelBase
     {
-        private ApiService _apiService;
-        private ObservableCollection<Land> _lands;
-        private bool _isRunning;
+        private readonly INavigationService _navigationService;
+        private readonly IApiService _apiService;
+        private ObservableCollection<LandItemViewModel> _lands;
         private bool _isEnabled;
+        private bool _isRunning;
+        private string _filter;
+        private List<LandResponse> _landList;
+        private DelegateCommand _searchCommand;
         private bool _isRefreshing;
 
 
         public LandsPageViewModel(
             INavigationService navigationService,
-            ApiService apiService) : base(navigationService)
+            IApiService apiService) : base(navigationService)
         {
-            _apiService = apiService;      
+            _navigationService = navigationService;
+            _apiService = apiService;
             Title = "Lands";
             IsRunning = true;
             LoadLands();
         }
 
-       public bool IsRunning
+
+
+        public bool IsRunning
         {
             get => _isRunning;
             set => SetProperty(ref _isRunning, value);
@@ -44,65 +49,104 @@ namespace Worldhands.Prism.ViewModels
             get => _isRefreshing;
             set => SetProperty(ref _isRefreshing, value);
         }
-
-        public ObservableCollection<Land> Lands
+        public ObservableCollection<LandItemViewModel> Lands
         {
             get => _lands;
             set => SetProperty(ref _lands, value);
         }
+        public string Filter
+        {
+            get => _filter;
+            set
+            {
+                SetProperty(ref _filter, value);
+                SearchLand();
+            }
+        }
+
+        public DelegateCommand SearchCommand => _searchCommand ?? (_searchCommand = new DelegateCommand(SearchLand));
 
 
         private async void LoadLands()
         {
-            IsRunning = true;
-            IsEnabled = false;
-   
-            var response = await _apiService.GetListAsync<Response>(
-               "https://restcountries.eu",
+            var url = App.Current.Resources["UrlAPI"].ToString();
+
+            var connection = await _apiService.CheckConnectionAsync(url);
+
+            if (!connection)
+            {
+                IsRunning = false;
+                await App.Current.MainPage.DisplayAlert(
+                    "Error",
+                    "Check the internet connection",
+                    "Accept");
+                return;
+            }
+
+            var response = await _apiService.GetListLandsAsync<LandResponse>(
+                "http://restcountries.eu",
                 "/rest",
-                "/v2/all");
+                "/v2/all/");
 
             if (!response.IsSuccess)
             {
-                await App.Current.MainPage.DisplayAlert("Error", response.Message, "Accept");
+                IsRunning = false;
+                await App.Current.MainPage.DisplayAlert(
+                    "Error",
+                    response.Message,
+                    "Accept");
                 return;
             }
-            var list = (List<Land>)response.Result;
-            Lands = new ObservableCollection<Land>(
-                ToLandItemViewModel());
-            IsRefreshing = false;
 
+            _landList = (List<LandResponse>)response.Result;
+            Lands = new ObservableCollection<LandItemViewModel>(ToLandItemViewModel());
+            IsRunning = false;
         }
 
-        
-        private IEnumerable<Land> ToLandItemViewModel()
+        private void SearchLand()
         {
-            return MainViewModel.GetInstance().LandsList.Select(l => new Land
+            if (string.IsNullOrEmpty(Filter))
             {
-                Alpha2Code = l.Alpha2Code,
-                Alpha3Code = l.Alpha3Code,
-                AltSpellings = l.AltSpellings,
-                Area = l.Area,
-                Borders = l.Borders,
-                CallingCodes = l.CallingCodes,
-                Capital = l.Capital,
-                Cioc = l.Cioc,
-                Currencies = l.Currencies,
-                Demonym = l.Demonym,
-                Flag = l.Flag,
-                Gini = l.Gini,             
-                Latlng = l.Latlng,
-                Name = l.Name,
-                NativeName = l.NativeName,
-                NumericCode = l.NumericCode,
-                Population = l.Population,
-                Region = l.Region,
-                RegionalBlocs = l.RegionalBlocs,
-                Subregion = l.Subregion,
-                Timezones = l.Timezones,
-                TopLevelDomain = l.TopLevelDomain,
-                Translations = l.Translations,
-            });        
+                Lands = new ObservableCollection<LandItemViewModel>(ToLandItemViewModel());
+
+            }
+            else
+            {
+                Lands = new ObservableCollection<LandItemViewModel>(
+                    ToLandItemViewModel().Where(c => c.Name.ToLower().Contains(_filter.ToLower()) ||
+                                         c.Capital.ToLower().Contains(_filter.ToLower())));
+            }
+        }
+
+        private IEnumerable<LandItemViewModel> ToLandItemViewModel()
+        {
+            return _landList.Select(c => new LandItemViewModel(_navigationService)
+            {
+                Alpha2Code = c.Alpha2Code,
+                Alpha3Code = c.Alpha3Code,
+                AltSpellings = c.AltSpellings,
+                Area = c.Area,
+                Borders = c.Borders,
+                CallingCodes = c.CallingCodes,
+                Capital = c.Capital,
+                Cioc = c.Cioc,
+                Currencies = c.Currencies,
+                Demonym = c.Demonym,
+                Flag = c.Flag,
+                Gini = c.Gini,
+                Languages = c.Languages,
+                Latlng = c.Latlng,
+                Name = c.Name,
+                NativeName = c.NativeName,
+                NumericCode = c.NumericCode,
+                Population = c.Population,
+                Region = c.Region,
+                RegionalBlocs = c.RegionalBlocs,
+                Subregion = c.Subregion,
+                Timezones = c.Timezones,
+                TopLevelDomain = c.TopLevelDomain,
+                Translations = c.Translations,
+            });
         }
     }
 }

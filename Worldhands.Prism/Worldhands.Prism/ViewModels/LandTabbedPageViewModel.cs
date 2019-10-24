@@ -1,16 +1,12 @@
-﻿using Prism.Commands;
-using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Prism.Navigation;
 
 namespace Worldhands.Prism.ViewModels
 {
-    public class LandTabbedPageViewModel : BindableBase
+    public class LandTabbedPageViewModel : ViewModelBase
     {
-        public LandTabbedPageViewModel()
+        public LandTabbedPageViewModel(INavigationService navigationService) : base(navigationService)
         {
-
+            Title = "Land";
         }
     }
 }

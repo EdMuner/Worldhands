@@ -19,7 +19,7 @@ namespace Worldhands.Common.Services
             string controller,
             TokenRequest request);
 
-        Task<Response> GetListAsync<T>(
+        Task<Response> GetListLandsAsync<T>(
            string urlBase,
            string servicePrefix,
            string controller);
@@ -29,6 +29,6 @@ namespace Worldhands.Common.Services
 
         Task<bool> CheckConnectionAsync(string url);
 
-       
+
     }
 }

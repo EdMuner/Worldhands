@@ -141,16 +141,19 @@ namespace Worldhands.Common.Services
                 return null;
             }
         }
-        public async Task<Response> GetListAsync<T>(
+        public async Task<Response> GetListLandsAsync<T>(
            string urlBase,
            string servicePrefix,
            string controller)
         {
             try
             {
-                var client = new HttpClient();
-                client.BaseAddress = new Uri(urlBase);
-                var url = string.Format("{0}{1}", servicePrefix, controller);
+                var client = new HttpClient
+                {
+                    BaseAddress = new Uri(urlBase)
+                };
+
+                var url = $"{servicePrefix}{controller}";
                 var response = await client.GetAsync(url);
                 var result = await response.Content.ReadAsStringAsync();
 

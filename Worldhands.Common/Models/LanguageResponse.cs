@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Worldhands.Common.Models
 {
-    public class Language
+    public class LanguageResponse
     {
   
         public string Iso639_1 { get; set; }
