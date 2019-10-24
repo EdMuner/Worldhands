@@ -11,7 +11,7 @@ namespace Worldhands.Prism
 {
     public partial class App
     {
-      
+
         public App() : this(null) { }
 
         public App(IPlatformInitializer initializer) : base(initializer) { }
@@ -25,10 +25,14 @@ namespace Worldhands.Prism
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.Register<IApiService, ApiServiceLand>();
+            containerRegistry.Register<IApiService, ApiService>();
             containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<LoginPage, LoginPageViewModel>();
             containerRegistry.RegisterForNavigation<LandsPage, LandsPageViewModel>();
+            containerRegistry.RegisterForNavigation<LandTabbedPage, LandTabbedPageViewModel>();
+            containerRegistry.RegisterForNavigation<BorderPage, BorderPageViewModel>();
+           
+
         }
     }
 }

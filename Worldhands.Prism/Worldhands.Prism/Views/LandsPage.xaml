@@ -1,9 +1,90 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:prism="http://prismlibrary.com"
+             xmlns:prism="http://prismlibrary.com"               
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="Worldhands.Prism.Views.LandsPage"
-             Title="{Binding Title}">
-  
+             Title="{Binding Title}" BackgroundColor="#c1ccd1">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            
+                  </ResourceDictionary>
+    </ContentPage.Resources>
+    <ScrollView>
+        <AbsoluteLayout>
+            <StackLayout
+                 AbsoluteLayout.LayoutBounds="0,0,1,1"
+                AbsoluteLayout.LayoutFlags="All"
+                Padding="10">
+                <SearchBar
+                Text="{Binding Filter, Mode=TwoWay}"
+                Placeholder="Search country..."
+                SearchCommand="{Binding SearchCommand}">
+                </SearchBar>
+                <ListView 
+                BackgroundColor="Transparent"
+                SeparatorVisibility="None"
+                HasUnevenRows="True"
+                ItemsSource="{Binding Lands}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Frame
+                                CornerRadius="10"
+                                HasShadow="True"
+                                Margin="5">
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding SelectLandCommand}"/>
+                                    </Frame.GestureRecognizers>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                     
+                                        <Grid
+                                    Grid.Column="1">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="2*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Label
+                                        Grid.Column="0"
+                                        Grid.Row="0"
+                                        FontAttributes="Bold"
+                                        Text="Name"/>
+                                            <Label
+                                        Grid.Column="1"
+                                        Grid.Row="0"
+                                        FontSize="Medium"
+                                        Text="{Binding Name}"
+                                        TextColor="Black">
+                                            </Label>
+                                            <Label
+                                        Grid.Column="0"
+                                        Grid.Row="1"
+                                        FontAttributes="Bold"
+                                        Text="Capital"/>
+                                            <Label
+                                        Grid.Column="1"
+                                        Grid.Row="1"
+                                        Text="{Binding Capital}"
+                                        TextColor="Black">
+                                            </Label>
+                                        </Grid>
+                                        <Image
+                                    Grid.Column="2"
+                                    Source="ic_chevron_right"/>
+                                    </Grid>
+                                </Frame>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+           
+        </AbsoluteLayout>
+    </ScrollView>
+
 </ContentPage>

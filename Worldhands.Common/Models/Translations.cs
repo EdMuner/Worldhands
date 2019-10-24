@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Worldhands.Common.ModelsLand
+namespace Worldhands.Common.Models
 {
     public class Translations
     {

@@ -10,10 +10,10 @@ using Worldhands.Common.Models;
 
 namespace Worldhands.Common.Services
 {
-    public class ApiServiceLand : IApiService
+    public class ApiService : IApiService
     {
 
-        public async Task<LandResponse<TokenResponse>> GetTokenAsync(
+        public async Task<Response> GetTokenAsync(
               string urlBase,
               string servicePrefix,
               string controller,
@@ -34,7 +34,7 @@ namespace Worldhands.Common.Services
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    return new LandResponse<TokenResponse>
+                    return new Response
                     {
                         IsSuccess = false,
                         Message = result,
@@ -42,7 +42,7 @@ namespace Worldhands.Common.Services
                 }
 
                 var token = JsonConvert.DeserializeObject<TokenResponse>(result);
-                return new LandResponse<TokenResponse>
+                return new Response
                 {
                     IsSuccess = true,
                     Result = token
@@ -50,7 +50,7 @@ namespace Worldhands.Common.Services
             }
             catch (Exception ex)
             {
-                return new LandResponse<TokenResponse>
+                return new Response
                 {
                     IsSuccess = false,
                     Message = ex.Message
@@ -58,12 +58,7 @@ namespace Worldhands.Common.Services
             }
         }
 
-        public Task GetList<T>(string v1, string v2, string v3)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<LandResponse<VisitorResponse>> GetVisitorByEmailAsync(
+        public async Task<Response> GetVisitorByEmailAsync(
             string urlBase,
             string servicePrefix,
             string controller,
@@ -88,7 +83,7 @@ namespace Worldhands.Common.Services
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    return new LandResponse<VisitorResponse>
+                    return new Response
                     {
                         IsSuccess = false,
                         Message = result,
@@ -96,7 +91,7 @@ namespace Worldhands.Common.Services
                 }
 
                 var visitor = JsonConvert.DeserializeObject<VisitorResponse>(result);
-                return new LandResponse<VisitorResponse>
+                return new Response
                 {
                     IsSuccess = true,
                     Result = visitor
@@ -104,7 +99,7 @@ namespace Worldhands.Common.Services
             }
             catch (Exception ex)
             {
-                return new LandResponse<VisitorResponse>
+                return new Response
                 {
                     IsSuccess = false,
                     Message = ex.Message
@@ -146,9 +141,48 @@ namespace Worldhands.Common.Services
                 return null;
             }
         }
+        public async Task<Response> GetListLandsAsync<T>(
+           string urlBase,
+           string servicePrefix,
+           string controller)
+        {
+            try
+            {
+                var client = new HttpClient
+                {
+                    BaseAddress = new Uri(urlBase)
+                };
 
+                var url = $"{servicePrefix}{controller}";
+                var response = await client.GetAsync(url);
+                var result = await response.Content.ReadAsStringAsync();
 
-        
+                if (!response.IsSuccessStatusCode)
+                {
+                    return new Response
+                    {
+                        IsSuccess = false,
+                        Message = result,
+                    };
+                }
+
+                var list = JsonConvert.DeserializeObject<List<T>>(result);
+                return new Response
+                {
+                    IsSuccess = true,
+                    Message = "Ok",
+                    Result = list,
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Response
+                {
+                    IsSuccess = false,
+                    Message = ex.Message,
+                };
+            }
+        }
 
     }   
 }
