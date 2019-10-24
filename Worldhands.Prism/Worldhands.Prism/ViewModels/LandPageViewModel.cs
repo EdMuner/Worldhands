@@ -1,34 +1,29 @@
-﻿using Prism.Navigation;
+﻿using Newtonsoft.Json;
+using Plugin.Settings;
+using Plugin.Settings.Abstractions;
+using Prism.Navigation;
+using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 using Worldhands.Common.Models;
+using Worldhands.Common.Services;
 
 namespace Worldhands.Prism.ViewModels
 {
-    public class LandPageViewModel : ViewModelBase
+    public class LandPageViewModel
     {
 
-        private LandResponse _land;
-
-        public LandPageViewModel(
-            INavigationService navigationService) : base(navigationService)
+        public LandPageViewModel(LandResponse land)
         {
+            this.Land = land;
+               
         }
-
-        public LandResponse Country
+       
+        public  LandResponse Land
         {
-            get => _land;
-            set => SetProperty(ref _land, value);
+            get;
+            set;
         }
-
-
-        public override void OnNavigatedTo(INavigationParameters parameters)
-        {
-            base.OnNavigatedTo(parameters);
-
-            if (parameters.ContainsKey("land"))
-            {
-                Country = parameters.GetValue<LandResponse>("land");
-                Title = "Information";
-            }
-        }
+      
     }
 }

@@ -1,27 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:prism="http://prismlibrary.com"               
-             prism:ViewModelLocator.AutowireViewModel="True"
-             x:Class="Worldhands.Prism.Views.LandsPage"
-             Title="{Binding Title}" BackgroundColor="#c1ccd1">
+<ContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:prism="http://prismlibrary.com"               
+    prism:ViewModelLocator.AutowireViewModel="True"
+    x:Class="Worldhands.Prism.Views.LandsPage"
+    Title="{Binding Title}" BackgroundColor="#c1ccd1">
+
     <ContentPage.Resources>
-        <ResourceDictionary>
-            
-                  </ResourceDictionary>
     </ContentPage.Resources>
     <ScrollView>
         <AbsoluteLayout>
             <StackLayout
-                 AbsoluteLayout.LayoutBounds="0,0,1,1"
+                AbsoluteLayout.LayoutBounds="0,0,1,1"
                 AbsoluteLayout.LayoutFlags="All"
                 Padding="10">
                 <SearchBar
                 Text="{Binding Filter, Mode=TwoWay}"
-                Placeholder="Search country..."
+                Placeholder="Search a country in the world..."
                 SearchCommand="{Binding SearchCommand}">
                 </SearchBar>
                 <ListView 
+                IsPullToRefreshEnabled="True"     
+                IsRefreshing="{Binding IsRefreshing, Mode=TwoWay}"
                 BackgroundColor="Transparent"
                 SeparatorVisibility="None"
                 HasUnevenRows="True"
@@ -30,9 +31,9 @@
                         <DataTemplate>
                             <ViewCell>
                                 <Frame
-                                CornerRadius="10"
+                                CornerRadius="8"
                                 HasShadow="True"
-                                Margin="5">
+                                Margin="3">
                                     <Frame.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding SelectLandCommand}"/>
                                     </Frame.GestureRecognizers>
@@ -42,7 +43,7 @@
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
-                                     
+
                                         <Grid
                                     Grid.Column="1">
                                             <Grid.ColumnDefinitions>
@@ -74,8 +75,8 @@
                                             </Label>
                                         </Grid>
                                         <Image
-                                    Grid.Column="2"
-                                    Source="ic_chevron_right"/>
+                                            Grid.Column="2"
+                                            Source="ic_chevron_right"/>
                                     </Grid>
                                 </Frame>
                             </ViewCell>
@@ -83,8 +84,6 @@
                     </ListView.ItemTemplate>
                 </ListView>
             </StackLayout>
-           
         </AbsoluteLayout>
     </ScrollView>
-
 </ContentPage>

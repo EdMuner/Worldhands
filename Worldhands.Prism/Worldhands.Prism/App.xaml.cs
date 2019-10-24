@@ -30,7 +30,7 @@ namespace Worldhands.Prism
             containerRegistry.RegisterForNavigation<LoginPage, LoginPageViewModel>();
             containerRegistry.RegisterForNavigation<LandsPage, LandsPageViewModel>();
             containerRegistry.RegisterForNavigation<LandTabbedPage, LandTabbedPageViewModel>();
-            containerRegistry.RegisterForNavigation<BorderPage, BorderPageViewModel>();
+          
            
 
         }

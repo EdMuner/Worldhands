@@ -5,17 +5,17 @@ using Worldhands.Common.Models;
 
 namespace Worldhands.Prism.ViewModels
 {
-    class MainPageViewModel
+    class MainViewModel
     {
 
-        private static MainPageViewModel _instance;
+        private static MainViewModel _instance;
 
-        public MainPageViewModel()
+        public MainViewModel()
         {
             _instance = this;
         }
 
-        public List<LandResponse> _landList { get; set; }
+        public List<LandResponse> LandList { get; set; }
 
         public LandsPageViewModel Lands
         {
@@ -30,11 +30,11 @@ namespace Worldhands.Prism.ViewModels
         }
 
         //Singleton abstracto para que cada que inicie se posicione sobre la MainViewModel
-        public static MainPageViewModel GetInstance()
+        public static MainViewModel GetInstance()
         {
             if (_instance == null)
             {
-                return new MainPageViewModel();
+                return new MainViewModel();
             }
             return _instance;
         }

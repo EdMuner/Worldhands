@@ -9,8 +9,7 @@
 
     <TabbedPage.Children>
         <local:LandPage/>
-        <local:BorderPage/>
-        
+       
     </TabbedPage.Children>
 
 
