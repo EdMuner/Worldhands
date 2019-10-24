@@ -4,20 +4,20 @@ using System.Text;
 
 namespace Worldhands.Common.Models
 {
-  
-        public class Border
+    public class Border
+    {
+        public string Code
         {
-            public string Code
-            {
-                get;
-                set;
-            }
-
-            public string Name
-            {
-                get;
-                set;
-            }
+            get;
+            set;
         }
-    
+
+        public string Name
+        {
+            get;
+            set;
+        }
+    }
+
+
 }
