@@ -3,6 +3,7 @@ using Prism.Navigation;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Input;
 using Worldhands.Common.Models;
 using Worldhands.Common.Services;
 
@@ -14,7 +15,6 @@ namespace Worldhands.Prism.ViewModels
         private readonly IApiService _apiService;
         private ObservableCollection<LandItemViewModel> _lands;
         private bool _isEnabled;
-        private bool _isRunning;
         private string _filter;
         private List<LandResponse> _landList;
         private DelegateCommand _searchCommand;
@@ -28,17 +28,11 @@ namespace Worldhands.Prism.ViewModels
             _navigationService = navigationService;
             _apiService = apiService;
             Title = "Lands";
-            IsRunning = true;
+            IsRefreshing = true;
             LoadLands();
         }
 
-
-
-        public bool IsRunning
-        {
-            get => _isRunning;
-            set => SetProperty(ref _isRunning, value);
-        }
+       
         public bool IsEnabled
         {
             get => _isEnabled;
@@ -65,17 +59,18 @@ namespace Worldhands.Prism.ViewModels
         }
 
         public DelegateCommand SearchCommand => _searchCommand ?? (_searchCommand = new DelegateCommand(SearchLand));
-
+        
 
         private async void LoadLands()
         {
+            IsRefreshing = true;
             var url = App.Current.Resources["UrlAPI"].ToString();
 
             var connection = await _apiService.CheckConnectionAsync(url);
 
             if (!connection)
             {
-                IsRunning = false;
+                IsRefreshing = false;
                 await App.Current.MainPage.DisplayAlert(
                     "Error",
                     "Check the internet connection",
@@ -90,7 +85,7 @@ namespace Worldhands.Prism.ViewModels
 
             if (!response.IsSuccess)
             {
-                IsRunning = false;
+                IsRefreshing = false;
                 await App.Current.MainPage.DisplayAlert(
                     "Error",
                     response.Message,
@@ -100,7 +95,7 @@ namespace Worldhands.Prism.ViewModels
 
             _landList = (List<LandResponse>)response.Result;
             Lands = new ObservableCollection<LandItemViewModel>(ToLandItemViewModel());
-            IsRunning = false;
+            IsRefreshing = false;
         }
 
         private void SearchLand()
@@ -113,8 +108,8 @@ namespace Worldhands.Prism.ViewModels
             else
             {
                 Lands = new ObservableCollection<LandItemViewModel>(
-                    ToLandItemViewModel().Where(c => c.Name.ToLower().Contains(_filter.ToLower()) ||
-                                         c.Capital.ToLower().Contains(_filter.ToLower())));
+                    ToLandItemViewModel().Where(l => l.Name.ToLower().Contains(_filter.ToLower()) ||
+                                         l.Capital.ToLower().Contains(_filter.ToLower())));
             }
         }
 

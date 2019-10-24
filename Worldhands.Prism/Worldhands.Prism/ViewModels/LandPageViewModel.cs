@@ -1,5 +1,9 @@
-﻿using Prism.Navigation;
+﻿using Newtonsoft.Json;
+using Plugin.Settings;
+using Plugin.Settings.Abstractions;
+using Prism.Navigation;
 using Worldhands.Common.Models;
+using Worldhands.Common.Services;
 
 namespace Worldhands.Prism.ViewModels
 {
@@ -11,14 +15,16 @@ namespace Worldhands.Prism.ViewModels
         public LandPageViewModel(
             INavigationService navigationService) : base(navigationService)
         {
+            Title = "Details";
         }
 
-        public LandResponse Country
+        public LandResponse Land
         {
             get => _land;
             set => SetProperty(ref _land, value);
         }
 
+        private static ISettings AppSettings => CrossSettings.Current;
 
         public override void OnNavigatedTo(INavigationParameters parameters)
         {
@@ -26,7 +32,7 @@ namespace Worldhands.Prism.ViewModels
 
             if (parameters.ContainsKey("land"))
             {
-                Country = parameters.GetValue<LandResponse>("land");
+              
                 Title = "Information";
             }
         }

@@ -8,8 +8,7 @@
 
     <StackLayout 
         Padding="10">
-       <Label
-            Text="Worldhands"/>
+       
         <Image
           
             HeightRequest="200"

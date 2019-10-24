@@ -21,7 +21,7 @@ namespace Worldhands.Prism.ViewModels
             INavigationService navigationService,
             IApiService apiService) : base (navigationService)
         {
-            Title = "Login";
+            Title = "WorldHands";
             IsEnabled = true;
             _navigationService = navigationService;
             _apiService = apiService;

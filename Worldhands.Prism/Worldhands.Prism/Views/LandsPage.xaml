@@ -13,15 +13,17 @@
     <ScrollView>
         <AbsoluteLayout>
             <StackLayout
-                 AbsoluteLayout.LayoutBounds="0,0,1,1"
+                AbsoluteLayout.LayoutBounds="0,0,1,1"
                 AbsoluteLayout.LayoutFlags="All"
                 Padding="10">
                 <SearchBar
                 Text="{Binding Filter, Mode=TwoWay}"
-                Placeholder="Search country..."
+                Placeholder="Search a country in the world..."
                 SearchCommand="{Binding SearchCommand}">
                 </SearchBar>
                 <ListView 
+                IsPullToRefreshEnabled="True"     
+                IsRefreshing="{Binding IsRefreshing, Mode=TwoWay}"
                 BackgroundColor="Transparent"
                 SeparatorVisibility="None"
                 HasUnevenRows="True"
@@ -30,9 +32,9 @@
                         <DataTemplate>
                             <ViewCell>
                                 <Frame
-                                CornerRadius="10"
+                                CornerRadius="8"
                                 HasShadow="True"
-                                Margin="5">
+                                Margin="3">
                                     <Frame.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding SelectLandCommand}"/>
                                     </Frame.GestureRecognizers>
@@ -74,8 +76,8 @@
                                             </Label>
                                         </Grid>
                                         <Image
-                                    Grid.Column="2"
-                                    Source="ic_chevron_right"/>
+                                            Grid.Column="2"
+                                            Source="ic_chevron_right"/>
                                     </Grid>
                                 </Frame>
                             </ViewCell>
