@@ -11,15 +11,16 @@ namespace Worldhands.Prism.ViewModels
 {
     public class LandsPageViewModel : ViewModelBase
     {
+        private DelegateCommand _searchCommand;
+        private ObservableCollection<LandItemViewModel> _lands;
         private readonly INavigationService _navigationService;
         private readonly IApiService _apiService;
-        private ObservableCollection<LandItemViewModel> _lands;
+        private bool _isRefreshing;
         private bool _isEnabled;
         private string _filter;
         private List<LandResponse> _landList;
-        private DelegateCommand _searchCommand;
-        private bool _isRefreshing;
-
+       
+       
 
         public LandsPageViewModel(
             INavigationService navigationService,
@@ -32,7 +33,9 @@ namespace Worldhands.Prism.ViewModels
             LoadLands();
         }
 
-       
+        public DelegateCommand SearchCommand => _searchCommand ?? (_searchCommand = new DelegateCommand(SearchLand));
+
+
         public bool IsEnabled
         {
             get => _isEnabled;
@@ -58,13 +61,12 @@ namespace Worldhands.Prism.ViewModels
             }
         }
 
-        public DelegateCommand SearchCommand => _searchCommand ?? (_searchCommand = new DelegateCommand(SearchLand));
-        
+     
 
         private async void LoadLands()
         {
             IsRefreshing = true;
-            var url = App.Current.Resources["UrlAPI"].ToString();
+            var url = App.Current.Resources["UrlAPILands"].ToString();
 
             var connection = await _apiService.CheckConnectionAsync(url);
 
@@ -79,7 +81,7 @@ namespace Worldhands.Prism.ViewModels
             }
 
             var response = await _apiService.GetListLandsAsync<LandResponse>(
-                "http://restcountries.eu",
+                url,
                 "/rest",
                 "/v2/all/");
 
@@ -96,21 +98,6 @@ namespace Worldhands.Prism.ViewModels
             _landList = (List<LandResponse>)response.Result;
             Lands = new ObservableCollection<LandItemViewModel>(ToLandItemViewModel());
             IsRefreshing = false;
-        }
-
-        private void SearchLand()
-        {
-            if (string.IsNullOrEmpty(Filter))
-            {
-                Lands = new ObservableCollection<LandItemViewModel>(ToLandItemViewModel());
-
-            }
-            else
-            {
-                Lands = new ObservableCollection<LandItemViewModel>(
-                    ToLandItemViewModel().Where(l => l.Name.ToLower().Contains(_filter.ToLower()) ||
-                                         l.Capital.ToLower().Contains(_filter.ToLower())));
-            }
         }
 
         private IEnumerable<LandItemViewModel> ToLandItemViewModel()
@@ -142,6 +129,21 @@ namespace Worldhands.Prism.ViewModels
                 TopLevelDomain = c.TopLevelDomain,
                 Translations = c.Translations,
             });
+        }
+
+        private void SearchLand()
+        {
+            if (string.IsNullOrEmpty(Filter))
+            {
+                Lands = new ObservableCollection<LandItemViewModel>(ToLandItemViewModel());
+
+            }
+            else
+            {
+                Lands = new ObservableCollection<LandItemViewModel>(
+                    ToLandItemViewModel().Where(l => l.Name.ToLower().Contains(_filter.ToLower()) ||
+                                         l.Capital.ToLower().Contains(_filter.ToLower())));
+            }
         }
     }
 }

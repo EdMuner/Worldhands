@@ -7,6 +7,7 @@
         <ResourceDictionary>
 
             <!-- Parameters -->
+            <x:String x:Key="UrlAPILands">https://restcountries.eu/</x:String>
             <x:String x:Key="UrlAPI">https://worldhands.azurewebsites.net/</x:String>
 
         </ResourceDictionary>
