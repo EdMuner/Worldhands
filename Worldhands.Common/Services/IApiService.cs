@@ -24,9 +24,6 @@ namespace Worldhands.Common.Services
            string servicePrefix,
            string controller);
 
-
-
-
         Task<bool> CheckConnectionAsync(string url);
 
 

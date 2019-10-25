@@ -6,9 +6,7 @@
     prism:ViewModelLocator.AutowireViewModel="True"
     x:Class="Worldhands.Prism.Views.LandsPage"
     Title="{Binding Title}" BackgroundColor="#c1ccd1">
-
-    <ContentPage.Resources>
-    </ContentPage.Resources>
+    
     <ScrollView>
         <AbsoluteLayout>
             <StackLayout
@@ -31,9 +29,9 @@
                         <DataTemplate>
                             <ViewCell>
                                 <Frame
-                                CornerRadius="8"
+                                CornerRadius="14"
                                 HasShadow="True"
-                                Margin="3">
+                                Margin="6">
                                     <Frame.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding SelectLandCommand}"/>
                                     </Frame.GestureRecognizers>
@@ -51,29 +49,74 @@
                                                 <ColumnDefinition Width="2*"/>
                                             </Grid.ColumnDefinitions>
                                             <Label
-                                        Grid.Column="0"
-                                        Grid.Row="0"
-                                        FontAttributes="Bold"
-                                        Text="Name"/>
+                                                Grid.Column="0"
+                                                Grid.Row="0"
+                                                FontAttributes="Bold"
+                                                Text="Name"/>
                                             <Label
-                                        Grid.Column="1"
-                                        Grid.Row="0"
-                                        FontSize="Medium"
-                                        Text="{Binding Name}"
-                                        TextColor="Black">
+                                                Grid.Column="1"
+                                                Grid.Row="0"
+                                                FontSize="Medium"
+                                                Text="{Binding Name}"
+                                                TextColor="Black">
                                             </Label>
                                             <Label
-                                        Grid.Column="0"
-                                        Grid.Row="1"
-                                        FontAttributes="Bold"
-                                        Text="Capital"/>
+                                                Grid.Column="0"
+                                                Grid.Row="1"
+                                                FontAttributes="Bold"
+                                                Text="Capital"/>
                                             <Label
-                                        Grid.Column="1"
-                                        Grid.Row="1"
-                                        Text="{Binding Capital}"
-                                        TextColor="Black">
+                                                Grid.Column="1"
+                                                Grid.Row="1"
+                                                Text="{Binding Capital}"
+                                                TextColor="Black">
+                                            </Label>
+                                            <Label
+                                                Grid.Column="0"
+                                                Grid.Row="2"
+                                                FontAttributes="Bold"
+                                                Text="Region"/>
+                                            <Label
+                                                Grid.Column="1"
+                                                Grid.Row="2"
+                                                 Text="{Binding Region}"
+                                                TextColor="Black">
+                                            </Label>
+                                            <Label
+                                                Grid.Column="0"
+                                                Grid.Row="3"
+                                                FontAttributes="Bold"
+                                                Text="Population"/>
+                                            <Label
+                                                Grid.Column="1"
+                                                Grid.Row="3"
+                                                 Text="{Binding Population}"
+                                                TextColor="Black">
+                                            </Label>
+                                            <Label
+                                                Grid.Column="0"
+                                                Grid.Row="4"
+                                                FontAttributes="Bold"
+                                                Text="Area"/>
+                                            <Label
+                                                Grid.Column="1"
+                                                Grid.Row="4"
+                                                 Text="{Binding Area}"
+                                                TextColor="Black">
+                                            </Label>
+                                            <Label
+                                                Grid.Column="0"
+                                                Grid.Row="5"
+                                                FontAttributes="Bold"
+                                                Text="Demonym"/>
+                                            <Label
+                                                Grid.Column="1"
+                                                Grid.Row="5"
+                                                 Text="{Binding Demonym}"
+                                                TextColor="Black">
                                             </Label>
                                         </Grid>
+   
                                         <Image
                                             Grid.Column="2"
                                             Source="ic_chevron_right"/>

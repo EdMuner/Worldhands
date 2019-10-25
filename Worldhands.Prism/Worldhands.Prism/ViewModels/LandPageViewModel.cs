@@ -10,20 +10,32 @@ using Worldhands.Common.Services;
 
 namespace Worldhands.Prism.ViewModels
 {
-    public class LandPageViewModel
+    public class LandPageViewModel : ViewModelBase
     {
-
-        public LandPageViewModel(LandResponse land)
-        {
-            this.Land = land;
-               
-        }
-       
-        public  LandResponse Land
-        {
-            get;
-            set;
-        }
+        private LandResponse _land;
       
+
+        public LandPageViewModel(
+            INavigationService navigationService) : base(navigationService)
+        {     
+        }
+        
+        public LandResponse land
+        {
+            get => _land;
+            set => SetProperty(ref _land, value);
+        }
+
+
+        public override void OnNavigatedTo(INavigationParameters parameters)
+        {
+            base.OnNavigatedTo(parameters);
+
+            if (parameters.ContainsKey("land"))
+            {
+                land = parameters.GetValue<LandResponse>("Land");
+                Title = "Information";
+            }
+        }
     }
 }

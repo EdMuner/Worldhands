@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Worldhands.Common.Models
 {
-    public class Translations
+    public class TranslationsResponse
     {
         [JsonProperty(PropertyName = "de")]
         public string Germany { get; set; }
